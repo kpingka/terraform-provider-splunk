@@ -1016,7 +1016,7 @@ func savedSearchesRead(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	if entry == nil {
-		return fmt.Errorf("Unable to find resource: %v", name)
+		return fmt.Errorf("Unable to find resource line 1019: %v", name)
 	}
 
 	// Now we read the configuration with proper owner and app
@@ -1032,7 +1032,7 @@ func savedSearchesRead(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	if entry == nil {
-		return fmt.Errorf("Unable to find resource: %v", name)
+		return fmt.Errorf("Unable to find resource line 1035: %v", name)
 	}
 
 	if err = d.Set("name", d.Id()); err != nil {
