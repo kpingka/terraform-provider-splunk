@@ -16,6 +16,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"log"
 
 	"github.com/splunk/terraform-provider-splunk/client/utils"
 )
@@ -130,17 +131,27 @@ func (c *Client) Patch(patchURL url.URL, body interface{}) (*http.Response, erro
 
 // DoRequest creates and execute a new request
 func (c *Client) DoRequest(method string, requestURL url.URL, body interface{}) (*http.Response, error) {
+	
+	log.Printf("[DEBUG] DoRequest method is: %s", string(method))
+	log.Printf("[DEBUG] DoRequest requestURL is: %s", string(requestURL.String()))
+
 	var buffer *bytes.Buffer
 	if contentBytes, ok := body.([]byte); ok {
 		buffer = bytes.NewBuffer(contentBytes)
 	} else {
 		if content, err := c.EncodeRequestBody(body); err == nil {
 			buffer = bytes.NewBuffer(content)
+			myString := string(content)
+			if myString.Contains("password") { myString="*****"}
+			log.Printf("[DEBUG] DoRequest body is: %s", string(myString))
+
 		} else {
 			return nil, err
 		}
 	}
 	request, err := c.NewRequest(method, requestURL.String(), buffer)
+
+
 	if err != nil {
 		return nil, err
 	}
@@ -165,6 +176,7 @@ func (c *Client) Login() (e error) {
 	if err != nil {
 		return err
 	}
+
 
 	switch response.StatusCode {
 	case 200:

@@ -9,6 +9,9 @@ import (
 )
 
 func (client *Client) CreateSavedSearches(name, owner, app string, savedSearchObject *models.SavedSearchObject) error {
+	
+
+	
 	values, err := query.Values(savedSearchObject)
 	values.Add("name", name)
 	if err != nil {
@@ -16,6 +19,10 @@ func (client *Client) CreateSavedSearches(name, owner, app string, savedSearchOb
 	}
 
 	endpoint := client.BuildSplunkURL(nil, "servicesNS", owner, app, "saved", "searches")
+
+	log.Printf("[DEBUG] Endpoint used in CreateSavedSearches is: %s", string(endpoint.String()))
+
+
 	resp, err := client.Post(endpoint, values)
 	if err != nil {
 		return err
