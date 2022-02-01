@@ -15,6 +15,7 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+	"regexp"
 	"time"
 	"log"
 
@@ -141,9 +142,11 @@ func (c *Client) DoRequest(method string, requestURL url.URL, body interface{}) 
 	} else {
 		if content, err := c.EncodeRequestBody(body); err == nil {
 			buffer = bytes.NewBuffer(content)
-			myString := string(content)
-			if myString.Contains("password") { myString="*****"}
-			log.Printf("[DEBUG] DoRequest body is: %s", string(myString))
+			BodyString := string(content)
+			
+			regexp := regexp.MustCompile("password.*")
+			BodyString=regexp.ReplaceAllString(BodyString,"xxxxxx")
+			log.Printf("[DEBUG] DoRequest body is: %s", string(BodyString))
 
 		} else {
 			return nil, err
